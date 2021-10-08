@@ -60,4 +60,5 @@ public class SidebarCap_02Controller extends SelectorComposer<Component> {
 
         return row;
     }
+
 }

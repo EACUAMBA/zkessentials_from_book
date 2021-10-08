@@ -165,6 +165,7 @@ Dentro do CDATA podemos chamar variaveis Java que estão impicitas sem precisar 
 - Não podemos definir breakpoints no zscript;
 - Por padrão ele é Java;
 
+### MVC no ZK
 ##### Como funciona o padrão MVC no ZK? No ZK temos as views representadas pelos ficheiros .zul e temos os Controllers (org.zkoss.zk.ui.util.Composer) represetnado por classes javas normais com metodos que normalmante são metodos que respondem a eventos, e por fim temos o model que é onde o codigo de negocios fica, onde colocamos as regras. quando um evento é disparado temos na tag um no que amara o elemnto ao metodos no controller certo. Olha a imagem.
 ![alt text](./mvc_flow.jpg?raw=true)
 
@@ -212,7 +213,7 @@ Para fazer isso deves dizer ao controller que ele é um SelectorComposer(Compone
  
  Os eventos são um dos recursos mais poderosos do ZK, podemos remover, mover, alterar o comportamento adicionar um novo componente apenas com um evento.
  
- ##### COmo criar um evento programaticamente?
+ ##### Como criar um evento programaticamente?
  Para criar um componente programaticamente devemos:
  - Criar uma instancia desse compoenente, (ComponenteXYZ compxyz= new ComponenteXYZ());
  - Personalizar as propriedades do componente (compxyz.setLabel("Luis"));
@@ -220,11 +221,72 @@ Para fazer isso deves dizer ao controller que ele é um SelectorComposer(Compone
  
  Desse jeito podemos ter o componente na nossa tela.
  
+ ##### Como adicionar eventos programaticamnete a um elemento?
+ Primeiro para isso devemos criar um objeto do tipo EventListener<Event> que implementa o SerializableEventListener, podemos sar classes anonimas e fazer a declaracao e a implementacao do metodo na mesma linha.
+ 
+ Apos termos a nossa classe anonima devera implementar o method onEvent e escrevemos nesse metodo a nossa regra de negocio ou o que queremos que aconteca quando o evento ser disparado.
+ 
+ Entao a logica é a seguinte, Ter um objecto EventListener que implementa o SeriazableEventListener e depois implementar o method onEvent com a regra d e negocio ou chamamento para um method mais especifico e por fim dizer ao componente que ele agora vai chamar o ouvidor de eventos X quando o evento Y for acionado.
+ 
+ <pre>
+    Componente.addEventListener(Events.ON_CLICK, nossoListener);
+ </pre>
+ 
+ Agora vamos ver como funciona no padrão MVVM;
+ 
+ #### Padrão MVVM (Model - View - ViewModel)
+ O padrao MVVM é muito semelhante ao MVC porem tem umas diferenças sutis, no caso do MVVM a View faz a mesma coisa que no MVC, o Model faz a mesma coisa que no MVC e o ModelView quase como o Controller porem temos uma pequena diferenca, o ViewModel não conhece a view, a view model é independente da view isso diminui a dependencia entre eles. vmaos ver na pratica.
+ 
+ ##### Como chamar uma ViewModel apartir da View Para usar seus dados?
+ Para fazer isso devemos definir na view um atributo chamado viewModel, este atributo recebe uma notacao @id('idreferencia') que é o nome que vamos usar para chamar esse objecto neste contexto da view e tambem vamos usar @init('caminhoabsolutodaclasseviewmodel') esta notacao vai instancial ua nossa view model, por isso nossa view model deve ser um POJO (Plain Old Java Object) porque sera instanciado sem nada no construtor. apos isso vamos usar o nome que demos no @id para chamar essa instancia e os metodos dela. vamos ver :
+ 
+ <pre>
+    &#60;grid viewModel="@id('produto') @init('com.mafurrasoft.dev.viewmodel.ProdutoViewModel')">
+ </pre>
+ *Agora podemos chamar produto que aponta para uma instancia de produtoViewModel, assim temos acesso ao metodos e podemos acessar as propriedades*
+ 
+ Mas ainda falta, devemos criar uma model que aponta para a colecao de produtos, para conseguirmos iterar sobre ele, para isso usamo o atributo model no mesmo elemento que usamos o atributo viewModel, mas logo depois, detro do model vamos definir uma notacao @load(produto.produtoActivosRegistradosHoje), imagina que temos um metodos chamado getProdutoActivosRegistradosHoje no nosso viewModel, como esse é um get ele vai logo identificar o metodo certo e teremos uma variavel model que aponta para uma colecao de produtos, ess colocao deve ser uma lista de instancias.
+ 
+  <pre>
+     &#60;grid viewModel="@id('produto') @init('com.mafurrasoft.dev.viewmodel.ProdutoViewModel')" model="@load(produto.produtosActivosRegistradosHoje)">
+  </pre>
+  *Agora temos uma variavel model que aponta para uma colecao de produtos.*
+  
+  Para iterar sobre essa coecao devemos fazer um template, esse template é como os dados serão arrumas a cada iteracao da colecao. para fazer o temmplate usamos o elemento template que tem umatributo name é qu o nome do model que queremos iterar nele, agora podemos criar a estrutura normal e definar onde cada variavelvai estar,, para chamar um valor no objeto iterando, usamo a palavra each dentro da notacao @load(each.propriedadedomodel) agora podemos trabalhar bem.
+<pre>
+    &#60;grid viewModel="@id('produto') @init('com.mafurrasoft.dev.viewmodel.ProdutoViewModel')" model="@load(produto.produtosActivosRegistradosHoje)">
+        ...
+        &#60;template name="model">
+            &#60;row>
+                &#60;label value="@load(each.designacao)">
+                &#60;image src="@load(each.caminho)">   
+            &#60;/row>
+        &#60;/template>
+    &#60;/grid>
+</pre> 
+
+Como podemos adicionar e manipular eventos?
+Para isso devemos usar o command que é usado na viewModel, Command é um metodo da viewModel que manipula alga na view, se um metodo tem essa anotacao significa que pode manipular lago na view, como remover e adicionar dados na lista.
+
+O sistema de ligacao de dados suporata lisgar enventos tambem, podemos fazer com que um evento chame um comando na viewModel e ate entregar daos para esse comando.
+
+para fazer isso devemos no elemento que queremos que seja o pivo devemos adicionar o atributo do evento que qqueremos tratar e depois inserir uma anotacao @commmand('nome_do_metodo_command', variavel = each), assim estamos a dizr ao elemeno qeu se tiver um evento x ele deverá procurar um comando, metodo com a anotacao comand com o nomes nome_do_metodo_command e atribuir ao parametro como argumento o objecto, model each (na verdade é mapear o objeto).
+
+<pre>
+     &#60;row onClick="@command('adicionarNoCarrinho', produto=each)" >
+  </pre>
+
+no nosso viewModel devemos então criar o metodo @Command e dar o mesmo nome que demos no @command do elemento, por fim devemos definir que ele vai fazer a aligacao do parametro que eu entregei para o mesmo tipo que eu espero no parametro, para isso usamos a notacao @BindingParam("nome_do_argumento"). Olha como ficará:
+<pre>
+     @Commmand
+     public void adicionarNoCarrinho(@BindingParam("produto") Produto produto){
+        ...
+     }
+</pre>
+*Note que o nome do argumento pode ser diferente do nome do bindingParam*
+
+**Agora sim já sabe como relacionar com MVVM.**
+
+  
  
  
- 
- 
-
-
-
-
