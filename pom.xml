@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mafurrasoft.dev</groupId>
-	<artifactId>zkessentials</artifactId>
+	<artifactId>zkessentials_from_book</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<zk.version>9.6.0</zk.version>
@@ -11,8 +11,8 @@
 		<packname>-${project.version}-FL-${maven.build.timestamp}</packname>
 	</properties>
 	<packaging>war</packaging>
-	<name>The zkessentials Project</name>
-	<description>The zkessentials Project</description>
+	<name>ZK Essentials From Book</name>
+	<description>ZK Framework, my pratices from the book.</description>
 	<licenses>
 		<license>
 			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
@@ -117,7 +117,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>zkessentials${packname}</finalName>
+							<finalName>zkessentials_from_book${packname}</finalName>
 							<appendAssemblyId>false</appendAssemblyId>
 							<descriptors>
 								<descriptor>src/main/assembly/webapp.xml</descriptor>

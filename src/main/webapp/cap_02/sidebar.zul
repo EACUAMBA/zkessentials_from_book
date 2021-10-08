@@ -1,0 +1,8 @@
+<grid hflex="1" vflex="1" sclass="sidebar" id="sidebar" apply="com.mafurrasoft.dev.cap_02.controller.SidebarCap_02Controller">
+    <columns>
+        <column width="50px"/>
+        <column/>
+    </columns>
+    <rows>
+    </rows>
+</grid>

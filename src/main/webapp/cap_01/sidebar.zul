@@ -1,18 +1,18 @@
-<grid hflex="1" vflex="1" sclass="sidebar">
+<grid hflex="1" vflex="1" sclass="sidebar" >
     <columns>
         <column width="50px"/>
         <column/>
     </columns>
     <rows>
-        <row>
+        <row sclass="sidebar-fn" >
             <image src="/img/site.png"/>
-            <a href="http:www.zkoss.org/">ZK</a>
+            <a href="http://www.zkoss.org/">ZK</a>
         </row>
-        <row>
+        <row sclass="sidebar-fn" >
             <image src="/img/demo.png"/>
-            <a href="http:www.zkoss.org/zkdemo">ZK Demo</a>
+            <a href="http://www.zkoss.org/zkdemo">ZK Demo</a>
         </row>
-        <row>
+        <row sclass="sidebar-fn" >
             <image src="/img/doc.png"/>
             <a href="https://www.zkoss.org/wiki/ZK_Developer%27s_Reference">ZK Developer Reference</a>
         </row>

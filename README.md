@@ -138,9 +138,92 @@
     &#60;/zk&#62; 
 </pre>
 
+##### Podemos tratar eventos como clique e etc usando zscript, definindo um ouvinte de eventos, desse jeito podemos inserir codigo seja JS, Java, e entre outros, dentro da tag &#60;zcritp> podemos definir uma outra tag chamadas &#60;![CDATA[ codigo vem aqui ]]> que serve para definir codigo que devera ser interpretado fazendo parte do XML, ele é como um comentario mas que faz parta do xml. Veja como:
+<pre>
+    &#60;zcript&#62;
+        &#60;![CDATA[ 
+            //Codigo Java
+            void ouvidorEvento(String nome){
+                java.lang.System.out.println("Imprima - Java no ZK! Parabens " + nome) 
+            }  
+        ]]&#62;
+    &#60;/zcript&#62; 
+</pre>
+*Este codigo deverá estar dentro da tag &#60;zk>*
 
+##### Após definir o ouvidor de eventos precisamos dizer ao elemento que ele deverá acionar o metodo quando algo acontecer, vamos definir que o elemento ao ser clicado ele deverá acionar o nosso ouvidorEvento(), assim o method vai imprimir na tela o texto.
+<pre>
+    &#60;zcript&#62;
+        &#60;tag onClick='ouvirEvento("Edilson");'&#62; 
+               Conteudo da tag.      
+        &#60;/tag&#62;
+    &#60;/zcript&#62; 
+</pre>
+Dentro do CDATA podemos chamar variaveis Java que estão impicitas sem precisar especificar com EL expressions.
+- Aconselha-se a não se usar o zscript;
+- Zscript é lento;
+- Não podemos definir breakpoints no zscript;
+- Por padrão ele é Java;
 
+##### Como funciona o padrão MVC no ZK? No ZK temos as views representadas pelos ficheiros .zul e temos os Controllers (org.zkoss.zk.ui.util.Composer) represetnado por classes javas normais com metodos que normalmante são metodos que respondem a eventos, e por fim temos o model que é onde o codigo de negocios fica, onde colocamos as regras. quando um evento é disparado temos na tag um no que amara o elemnto ao metodos no controller certo. Olha a imagem.
+![alt text](./mvc_flow.jpg?raw=true)
 
+##### Para criar controller
+Para criar um Controller devemos criar uma classe normar e herdar de **org.zkoss.zk.ui.select.SelectorComposer** dentro do &#60;x> devemos definir que o component que vai ser entregue será um component (**org.zkoss.zk.ui.Component**) padrão.
+
+Depois disso devemos dizer a nosso view que elá sera manipulada pelo controller X, para fazer isso devemos inserir em um atributo **apply="nomedaclasseabsoluto"** no elemento (Assim os elementos estão ligados). Ex:
+<pre>
+&#60;tag apply="com.mafurrasoft.dev.controller.PaginaXController"&#62;
+&#60;/tag&#62;
+</pre>
+
+##### Como amarar um componente na view (.zul) com a variavel no controller Composer?
+
+Para fazer isso deves dizer ao controller que ele é um SelectorComposer(Component), assim o nosso controller passa a permitir esse tipo de anotação **(@Wire)**, vamos ver um exemplo:
+ <pre>
+ Na view
+ 
+ &#60;tag id="tabela" apply="com.mafurrasoft.dev.controller.PaginaXController"&#62;
+ &#60;/tag&#62;
+ 
+ No controller que é um SelectorComposer&#60;que recebe Component>
+ 
+ @Wire
+ private Grid tabela;
+ </pre>
+ 
+ ##### Como realizar acções antes da view aparecer?
+ Para isso devemos subescrever um metodo chamado doAfterCompose(Component comp).
+ Esse componente será adicionado pelo proprio ZK não precisamos mecher nisso, então vamos entender melhor.
+ Quando esse componente que tem o apply e for inicializada, o controller que tiver o emtodo doAfterCompose(Component comp) vai vai ser executado antes do compoenente ser criado, assim podemos adicionar elemenos dinamicamente antes do carregamento.
+ Não esquecá que deves chamar o metodos do pai, com super.doAfterComposer();
+ 
+ O metodo doAfterComposer executa depois da view instanciar os componentes mas antes deles aparecerem na tela. Usamos esse method porque queremos trabalha com os componentes instanciados mas queremos mexer neles antes de aparecerem na tela.
+ 
+ <pre>
+    public void doAfterComposer(Component comp){
+        super.doAfterComposer();
+        //Teu codigo antes do compoonente ser composto na tela.
+    }
+ </pre>
+ 
+ ##### Eventos e Ouvidores de Eventos
+ No ZK temos Eventos e Ouvidores de Eventos, um evento (org.zkoss.zk.event.Event) é uma abstração de uma atividade do utilizados do sistema, ela pode ser clique, mouse por cima e etc, esse vento quando ocorro o navegador envia ele para o servidor, e no servidor se tivermos um ouvidor de evento com os mesmo nome e o mesmo tipo de dado ele vai ser executado, por exemplo, se clicarmos em um botao vamos disparar um evento de clique, um onClique Event, esse evento será enviado directamente para o navegador e se esse botao tiver algum ouvidor de evento registrado esse ouvidor vai ser executado.
+ 
+ Os eventos são um dos recursos mais poderosos do ZK, podemos remover, mover, alterar o comportamento adicionar um novo componente apenas com um evento.
+ 
+ ##### COmo criar um evento programaticamente?
+ Para criar um componente programaticamente devemos:
+ - Criar uma instancia desse compoenente, (ComponenteXYZ compxyz= new ComponenteXYZ());
+ - Personalizar as propriedades do componente (compxyz.setLabel("Luis"));
+ - Anexar esse componente a um outro usando o appendChild(Componente), (rowz.appendChild(compxyz));
+ 
+ Desse jeito podemos ter o componente na nossa tela.
+ 
+ 
+ 
+ 
+ 
 
 
 
