@@ -61,11 +61,11 @@
 			<version>${zk.version}</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.zkoss.zk</groupId>
 			<artifactId>zuti</artifactId>
 			<version>${zk.version}</version>
-		</dependency>
+		</dependency>-->
 		
 		<dependency>
 			<groupId>commons-io</groupId>

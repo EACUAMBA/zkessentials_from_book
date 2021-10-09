@@ -2,16 +2,16 @@
 <zk>
     <borderlayout hflex="1" vflex="1">
         <north height="120px"  border="none">
-            <include src="/cap_02/mv_vm/banner.zul"/>
+            <include src="/cap_03/mvc/banner.zul"/>
         </north>
         <west width="260px" border="none" collapsible="true" splittable="true" minsize="100">
-            <include src="/cap_02/mv_vm/sidebar.zul"/>
+            <include src="/cap_03/mvc/sidebar.zul"/>
         </west>
         <center id="mainContent" autoscroll="true">
-            <include src="/cap_02/mv_vm/main.zul"/>
+            <include src="/cap_03/mvc/profile-mvc.zul"/>
         </center>
         <south height="100px" border="none">
-            <include src="/cap_02/mv_vm/footer.zul"/>
+            <include src="/cap_03/mvc/footer.zul"/>
         </south>
     </borderlayout>
 </zk>

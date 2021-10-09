@@ -287,6 +287,87 @@ no nosso viewModel devemos então criar o metodo @Command e dar o mesmo nome que
 
 **Agora sim já sabe como relacionar com MVVM.**
 
-  
+#### Novos elementos e atributos ;)
+&#60;window> - este componente é usado para agrupar outros componentes, ele tem uma carasterirticas ser iDSpace o que significa que dentro dele temos outro espaço de IDs podemos repitir os IDs  de dentro fora dele.
+
+Ele aceita uma tag chamada caption que cria meio que um titulo essa caption aceita label(rotulo) e imagens, vamos ver eles em funcionamento:
+
+<pre>
+    &#60;window>
+        &#60;caption label="Rotulo do window" src="caminho_da_imagen"/>
+    &#60;/window>
+</pre>
+
+&#60;vlayout> e &#60;hlayout> - Estes elemento sao semelhantes que o vbox e o hbox porem com uma diferença eles são mais leves e não possuem atributos como align, pack e splitter.
+
+atributo hflex ou vflex com o valor min, serve para limitar o componente a não exceder o tamanho do espaço onde está, apenas conter os dados.
+
+O elemento cell é usaod dentro de row, hbox, vbox para nos dar um amir controllo sobre o alinhamento, expansao das colunas e linhas e do comprimento de uma linha individual.
+
+##### Para fazer input de dados
+Para fazer input de dados temos varios elementos, mas os mais usados são: campo de texto (textbox) e data(datebox), veja um exemplo:
+<pre>
+    &#60;textfield id="nome"/>
+    &#60;datebox id="dataNascimento">
+</pre>
+
+Podemos tambem definir regras para os dados, assim o usuario não vai inserir dados invalidos.
+
+Olha como :  
+
+<pre>
+    &#60;textfield id="nome" contraint="no empty: Preencha o campo desgraça!"/>
+    &#60;datebox id="dataNascimento" constraint="no future: Essa é mesmo sua data?">
+</pre> 
  
+ Para carregar dados nos compoenetes podemos usar o metodo que vimos antes o .doAfterCompose(Component comp);
  
+ Para manipular os elementos da view podemos usar o @wire para obter os as instancias.
+ 
+ ##### Novo elemento ListBox
+É com componente usado para criar caixas de listas que podem ser multi selecionavei ou nao, usando mold="select", estas lista podem ocupar tota tela se não definirmos um molde, elas tem uma aparencia como a tabela.
+<pre>
+    &#60;listbox mold="select">
+</pre>
+
+
+
+Para definir um item como selecionado programaticamete usamos o metodo .addToSellection(item ou items) que serão marcados como selecionados.
+
+##### Uma breve explicação sobre Component, Model e Template
+
+Os componentes Zk foram feitos para aceitar diferentes tipos de objectos model que contem dados para serem rederizados, os componentes que recebem esses dados vão rederizar de acordo com o template que foi definindo no elemento &#60;template>. 
+
+*Esse tipo de abordagem contribui para a teoria da responsabilidade unica, onde nos mantemos a reusabilidade dos dados e do componente quando separamos aimplementacao do componente com os dados, podedendo assim usar os mesmos dados com outros componentes apenas trocando a implementacao neles*
+
+##### Para isso devemos criar priemrio um molde de dados
+Podemos usar o molde ListModelList&#60;TIpodeDado>, de pois podemos coloca-la dentro de uma listbox com o metodo setModel(); Olha como fica:
+<pre>
+    ListModelList&#60;String> paises = new ListModelList&#60;String>(UtilService.getListaDePaises());
+    paisesListBox.setModel(paises);
+</pre>
+
+Depois devemos definir um template para o model que vamos enviar, definindo como os dados seráqo apresentados no listbox, nesse template definimos o nome dele que será molde porque é o que enviamos do controller para a listbox e depois podemos especificar onde cada daos vai estar usando EL Expression ${each};
+<pre>
+    &#60;listbox id="paisesListBox" model="select" width="500px">
+        &#60;template name="model">
+            &#60;listitem label="${each}">
+        &#60;/template>
+    &#60;/listbox>
+</pre>
+-Devemos definir o atributo name do template como model, porque assim estamos dizendo ao template que aquele é um molde para ele trabalhar nele;
+- Podemos acessar cada item da iteracao do molde usando ${each.propriedade}, que acessa variaveis implicitas.
+*listitem é um elemnto filho de lisbox, representa um item do listbox e nos vamos repitir o lisitem ate o numero de iteracoes terminar.*
+
+##### Como adicionar dados aos componentes?
+A maior parte dos componente permite que sejam adicionadaos dados dinamicamente usando o metodo .setValue(dados);
+
+#### Outra forma de definir um ouvidor de evento
+
+
+ 
+
+
+
+
+
