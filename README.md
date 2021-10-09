@@ -363,11 +363,129 @@ Depois devemos definir um template para o model que vamos enviar, definindo como
 A maior parte dos componente permite que sejam adicionadaos dados dinamicamente usando o metodo .setValue(dados);
 
 #### Outra forma de definir um ouvidor de evento
+Uma forma mais simples de definir um ouvidor de eventos ao inves de usar o addEventListener(Instancia de EventListener) é usar a anotação @Listen ao usar essa anotacao o ZK fara o trabalho para te, vai fazer o binding do evento e do ouvidor.
+Para fazer isso temos que seguir certas regras:
+- Um method ouvidor de evento deve ser public;
+- não deve ter retorn, ou deve retornar u void (vazio);
+- não deve eter paramentro amoneos que seja um parametro do msmo tipo que o evento.
+Vamos ver como declarar:
+<pre>
+@Listen("onClick=#saveProfile")
+public void salvePerfil(){
+    ...
+}
+</pre>
 
+- O @Listen diz que o metodo está a ouvir os eventos;
+- os argumentos que passamos com onClick definem que tipo de evento ele vai ouvir
+- =#saveProfile é o id do componente que sera ouvido o evento
 
+Neste caso o ZK vai procurar um componente com um id saveProfile e quando ele sofrer um clique vai chamar este metodo.
+
+##### Como obter dados selecionado de uma listbox?
+Para fazer isso precisa ter a instancia dessa listbox, depois podes chamar um metho da listbox o getSelection (metodo da ListModelList, deves fazer o cast dos modeis e depois o getSelection), como a listbox permite selecao multipla esse metodo vai retornar uma lista do tipo SET (Set não aceitadas dados duplicados na lista) com os elementos selecionados, depois é so colocar os dados onde quiser, ou pegar apenas um.
+<pre>
+    Set&#60;String> selection = ((ListModelList&#60;String>)listbox.&#60;String>getModel()).getSelection();
+    user.setPais(selection.iterator().next());
+</pre>
  
+ ##### Como carregar dados para os inputs usando MVVM?
+ Para fazer isso usamos o mesmo sistema que usamos antes para colocar os dados, chamamos a anotacao @load(id.propriedade), assim podemos definir por exemplo um nome em um textbox, usando o load, no atributo values podemos colocar la o @load(produto.designacao), prontos.
+ <pre>
+    &#60;textbox value="@load(produto.designacao)"/>
+ </pre>
+ 
+ **Se quisermos salvar os dados podemos definir @save(produto.designacao)**
+ Assim logo que o nome for alterado ele vai sincronizar com o a propriedade produto que esta no viewmodel.
+ <pre>
+    &#60;textbox value="@load(produto.designacao)@save(produto.designacao)"/>
+ </pre>
+ 
+ *Essa abordagem é dificil então a ZK crio uma anotacao que simplica essas duas, a @bind(produto.designacao)*
+  <pre>
+     &#60;textbox value="@bind(produto.designacao)"/>
+  </pre>
+ 
+ ##### Podemos em algum momento definir o valor de uma listbox
+ Para isso podemo usar o atributo da listbox selectedItem="item selecionado", esse item deve exixtir na listbox.
+ assim facilitamos o trabalho.
+ <pre>
+     &#60;listbox value="@load(produto.categoria)"/>
+  </pre>
+  
+  ##### Podemos realizar acções quando alguma propriedade do formaulario mudar, para fazer isso
+  Usmaos ums notacao @NotifyChange("Propdiedade"), assim sempre que uma propriedade mudar ele vai executar o metodo com essa anotacao, essa notacao fica sempre por baixo do command
+  <pre>
+  @Command
+  @NotityChange("produto")
+  public void salvar(){
+    ...
+  }
+  </pre>
+  
+  ##### Um problema que encontramos é
+  que quando uasmo o MVVM com o formulario quando escrevemos os dados e depois o textbox ou outro component de input perdeo foco, os dados sao sincronizados na hora com o objecto na classe viewmodel, isso não esta bom porque o usuario pode pensar que os seus dados foram salvos, enqanto não.
+  
+  Para evitar isso podemos armazenar as mudancas em um objecto intermediario de buffer e somento persistir as mudancas no objecto final quando o usuario clicar no save.
+  
+  para fazer isso devemos usar um atributo chamado form, nele vamos definir uma id e carregar o usuario e vamos salvar porem com uma condicao, vamos salvar entes do save ser executado.
 
+#### ListBox
+Um list box pode ter mais de uma coluna, para isso devemos definir os cabecalhos usando listhead e com listheader.
+Usadndo esses elementos temos um grande controller sobre o listbox, olhe como:
 
+<pre>
+&#60;listbox mold="select">
+    &#60;listhead>
+        &#60;listheadr width="50px">
+        &#60;listheadr>
+    &#60;/listhead>
+    &#60;template name="model">
+        &#60;listitem value="${each}">
+            &#60;listcell>
+                &#60;image src="${each.imgSrc}">
+            &#60;/listcell>
+            &#60;listcell>
+                &#60;textbox value="${each.designacao}">
+            &#60;/listcell>
+        &#60;/listitem>
+    &#60;/template>
+&#60;/listbox>
+</pre>
 
+*Algo interessante que temos é que podemos reencaminhar eventos para outros compoenents, para fazer isso usamod forward="evento=idComponent"*
+<pre>
+&#60;button forward="onClick=todoListbox.onTodoDelete">
+</pre>
 
+**Podemos ter acesso ao componente pai do elemento basta chamar o metodo .getParent() do componente filho**
+
+#### Recurso forward
+Esse recurso é muito importante e ajuda muito quando queremos capturar um evento de um componente que esta dentro do outro mas queremos que o evento seja do compoenente pai e não dele proprio, para isso podemos avancar o evento com o atributo forward="onClick=IdElementoPai.onNovoEvento"
+*Apalavra on antes do nomedoevento é obrigatoria.*
+<pre>
+&#60;listbox id="produtosLB">
+    &#60;listitem>
+        &#60;checkbox forward="onCheck=produtosLB.onMarcarComoVendido"/>
+    &#60;/listitem>
+    &#60;listitem>
+        &#60;checkbox forward="onCheck=produtosLB.onMarcarComoVendido"/>
+    &#60;/listitem>
+&#60;/listbox>
+</pre>
+
+*Imagina que queremos saber o produto que teve o seu checkbox marcado, o que devemos fazer, encaminhar o evento de check para o elemento listbox e depois podemos saber quem foi checkado no controller*
+Olha como:
+
+<pre>
+    @Listen("onMarcarComoVendido = #produtosLB")
+    public void definirProdutoComoVendido(ForwardEvent fe){
+        Checkbox produtoCheckbox = (Checkbox)fe.getOrigin().getTarget(); //Estamos obtendo o componente que gerou o evento.
+        
+        //A partir do elemento podemos ir ate o lisitem e obter o produto 
+        Listitem item = (Listitem)produtoCheckbox.getParent(); //que é o listitem
+        Produto p = ite,.getValue(); 
+        ...
+    }
+</pre>
 

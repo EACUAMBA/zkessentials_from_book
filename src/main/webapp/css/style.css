@@ -3,7 +3,7 @@
 }
 
 .banner {
-    background-color:#102d35;
+    background-color:#6d6875;
     color: white;
     padding: 5px 10px;
 }
@@ -16,7 +16,7 @@
 }
 
 .footer {
-    background-color:#102d35;
+    background-color:#012a4a;
     color: white;
     padding-top: 5px;
 }
@@ -69,4 +69,10 @@
 
 .todo-box {
     padding-right:4px;
+}
+
+
+.fechar-bt{
+    background-color: crimson;
+    color: white;
 }
