@@ -413,8 +413,8 @@ Para fazer isso precisa ter a instancia dessa listbox, depois podes chamar um me
      &#60;listbox value="@load(produto.categoria)"/>
   </pre>
   
-  ##### Podemos realizar acções quando alguma propriedade do formaulario mudar, para fazer isso
-  Usmaos ums notacao @NotifyChange("Propdiedade"), assim sempre que uma propriedade mudar ele vai executar o metodo com essa anotacao, essa notacao fica sempre por baixo do command
+  ##### Quando estamov usando o padrao MVVM quermeos notificar o Binder que o objecto ligado(Bound) foi alterado, para isso podemos notificar com a anotacao @NotifyChange({"Propriedadeque mudou"})
+
   <pre>
   @Command
   @NotityChange("produto")
@@ -425,10 +425,22 @@ Para fazer isso precisa ter a instancia dessa listbox, depois podes chamar um me
   
   ##### Um problema que encontramos é
   que quando uasmo o MVVM com o formulario quando escrevemos os dados e depois o textbox ou outro component de input perdeo foco, os dados sao sincronizados na hora com o objecto na classe viewmodel, isso não esta bom porque o usuario pode pensar que os seus dados foram salvos, enqanto não.
-  
   Para evitar isso podemos armazenar as mudancas em um objecto intermediario de buffer e somento persistir as mudancas no objecto final quando o usuario clicar no save.
-  
   para fazer isso devemos usar um atributo chamado form, nele vamos definir uma id e carregar o usuario e vamos salvar porem com uma condicao, vamos salvar entes do save ser executado.
+  
+  <pre>
+&#60;vlayout form="@id('todoForm') @load(vm.selectedTodo) @save(vm.selectedTodo, before='actualizar') @validator(vm.todoValidator)">
+    &#60;radiogroup model="@bind(vm.priorityList)" selectedItem="@bind(todoForm.priority)">
+        &#60;template name="model">
+            &#60;radio label="@bind(each.label)"/>
+        &#60;/template>
+    &#60;/radiogroup>
+&#60;/vlayout>
+  </pre>
+  *Note que aí no exemplo usamos um form no componente vlayout e que depois disso colocamos um id e dissemos que os dados desse fomr viriam do **vm.selectedTodo** que é o objecto ligaod ao ao outro component pai deste, assim temos um intermediario entre o componente SelectedTodo e os dados no formulario.*
+  
+  **o @save(objeto, before='comammdodobotao') é so executado assim que o botao for executado, o botao é cicado então o form pega os dados que estao no objecto intermediario e passa para o objecto selectedTodo**
+
 
 #### ListBox
 Um list box pode ter mais de uma coluna, para isso devemos definir os cabecalhos usando listhead e com listheader.
@@ -488,4 +500,35 @@ Olha como:
         ...
     }
 </pre>
+
+#### Como validar com o MVVM
+para isso usamos um implementação da classe abstracta org.zkoss.bind.validator.AbstractValidator, e implementamos o metodo validate(ValidationContext ctx), dentro do metodo podemos pegar o objecto que esta sendo tratado no formulario com o metodo do ctx..getProperty().getValue() é so fazer o cast e ja está. Tendo o objecto podmemos fazer as verificaçoes e mostrar uma menssagem se estiver errado etambem colocar que o ctx.setInvalidate() ou podemos deixar passar não fazer nada.
+
+<pre>
+import org.zkoss.bind.ValidationContext;
+import org.zkoss.bind.validator.AbstractValidator;
+import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.util.Clients;
+
+public class TodoValidator extends AbstractValidator {
+    @Override
+    public void validate(ValidationContext ctx) {
+        Todo todo = (Todo)ctx.getProperty().getValue();
+
+        if(Strings.isBlank((todo.getSubject()))){
+            Clients.showNotification("Assunto em branco.");
+
+            ctx.setInvalid();
+        }
+    }
+}
+</pre>
+
+
+##### Podemos colcoar validacoes com EL Expressions como a baixo no @bind
+<pre>
+&#60;east  visible="@bind(not empty vm.selectedTodo)">
+</pre>
+
+
 

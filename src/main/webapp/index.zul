@@ -1,3 +1,8 @@
 <zk>
-	<label pre="true" value="Olá Mundo com ZK, &#xA;por Edilson Alexandre Cuamba."/>
+    <vbox align="center" pack="center" vflex="1" hflex="1" style="background: #1085b1;">
+        <label style="color: white; font-size: 1.5rem">Olá Mundo com</label>
+        <a href='https://www.zkoss.com'
+           style="color: #054570 ; font-size: 2.0rem; font-weight: bold; text-decoration: none;">ZK</a>
+        <label style="color: white; font-size: 1.5rem">por Edilson Alexandre Cuamba.</label>
+    </vbox>
 </zk>
