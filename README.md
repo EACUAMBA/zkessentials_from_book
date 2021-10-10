@@ -474,7 +474,8 @@ Usadndo esses elementos temos um grande controller sobre o listbox, olhe como:
 
 #### Recurso forward
 Esse recurso é muito importante e ajuda muito quando queremos capturar um evento de um componente que esta dentro do outro mas queremos que o evento seja do compoenente pai e não dele proprio, para isso podemos avancar o evento com o atributo forward="onClick=IdElementoPai.onNovoEvento"
-*Apalavra on antes do nomedoevento é obrigatoria.*
+
+*Apalavra **on** antes do nomedoevento é obrigatoria.*
 <pre>
 &#60;listbox id="produtosLB">
     &#60;listitem>
