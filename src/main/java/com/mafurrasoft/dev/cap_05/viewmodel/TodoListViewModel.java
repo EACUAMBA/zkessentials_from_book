@@ -1,7 +1,7 @@
-package com.mafurrasoft.dev.cap_04.viewmodel;
+package com.mafurrasoft.dev.cap_05.viewmodel;
 
-import com.mafurrasoft.dev.cap_04.service.TodoListServiceImpl;
-import com.mafurrasoft.dev.cap_04.viewmodel.validator.TodoValidator;
+import com.mafurrasoft.dev.cap_05.service.TodoListServiceImpl;
+import com.mafurrasoft.dev.cap_05.viewmodel.validator.TodoValidator;
 import com.mafurrasoft.dev.entity.Priority;
 import com.mafurrasoft.dev.entity.Todo;
 import com.mafurrasoft.dev.services.TodoListService;

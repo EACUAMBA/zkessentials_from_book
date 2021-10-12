@@ -1,0 +1,18 @@
+<div>
+    <navbar id="navbar" orient="horizontal" collapsed="false" viewModel="@id('vm') @init('com.mafurrasoft.dev.cap_05.viewmodel.MenuViewModel')">
+        <apply template="iterate" menuItems='@ref(vm.menuHierarchy)'/>
+    </navbar>
+    <template name="menu" var="menuItem">
+        <nav label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)">
+            <apply template="iterate" menuItems="@ref(menuItem.subMenus)"/>
+        </nav>
+    </template>
+    <template name="iterate" var="menuItems">
+        <forEach items="@load(menuItems)"><!--Podemos usar var="nomeDaVariavel"-->
+            <apply template="@load(empty each.subMenus ? 'menuitem' : 'menu')" menuItem="@ref(each)"/>
+        </forEach>
+    </template>
+    <template name="menuitem" var="menuItem">
+        <navitem label="@load(menuItem.label)"/>
+    </template>
+</div>

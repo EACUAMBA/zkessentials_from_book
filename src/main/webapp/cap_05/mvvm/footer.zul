@@ -1,0 +1,7 @@
+<div hflex="1" vflex="1" sclass="footer">
+    <vbox hflex="1" vflex="1" align="center">
+        ZK Essentials feito por Edilson A. Cuamba - Arquiteto de Software e Técnico em UX/UI Design. ZK na versão ${desktop.webApp.version}
+        <a href="https://github.com/EACUAMBA">Meu GitHUb</a>
+        <a href="https://www.linkedin.com/in/eacuamba/">Meu LinkedIn para ver Minhas certificações e experiencias</a>
+    </vbox>
+</div>

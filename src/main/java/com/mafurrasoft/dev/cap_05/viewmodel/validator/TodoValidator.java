@@ -1,4 +1,4 @@
-package com.mafurrasoft.dev.cap_04.viewmodel.validator;
+package com.mafurrasoft.dev.cap_05.viewmodel.validator;
 
 import com.mafurrasoft.dev.entity.Todo;
 import org.zkoss.bind.ValidationContext;
