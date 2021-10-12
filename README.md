@@ -531,5 +531,46 @@ public class TodoValidator extends AbstractValidator {
 &#60;east  visible="@bind(not empty vm.selectedTodo)">
 </pre>
 
+#### Como fazer menu usando, ZK e no padrão view model?
+Para fazer isso temos varias manerias imaginando o senarioo de um meno podemos ver que temosirem, subitem e subitem de subitem e assim vai. para fazermos um menu com subitem e item devemos criar a estrutura desse menu, um ittem do menu pode ser um sub item, logo podemos cirar uma classe que representa um item e que essa classe tem varis item como subitem. ficará algo assim:
 
+<pre>
+public class MenuNode {
+    private String label;
+    private String iconSclass;
+    private List&#60;MenuNode> subMenus;
+</pre>
+*Note que o submenus é na verdade uma lista dos proprios nodes do menu. **Crie os getters e settes**.*
 
+Agora que ja temos uma classe que representa um node do menu, podemos criar uma que será a nossa viewModel.
+<pre>
+public class MenuViewModel {
+    private List&#60;MenuN**ode> menuHierarchy = null;
+    @Init
+    public void carryInfo(){
+        this.menuHierarchy = new LinkedList&#60>();
+        this.menuHierarchy.add(new MenuNode("Inicio", "", Arrays.asList(new MenuNode("Sobre nós", "", null), new MenuNode("Contactos", "", null))));
+    }
+</pre>
+*Agora devemos criar a nossa view*
+<pre>
+&#60;div>
+    &#60;navbar id="navbar" orient="horizontal" collapsed="false" viewModel="@id('vm') @init('com.mafurrasoft.dev.cap_05.viewmodel.MenuViewModel')">
+        &#60;apply template="iterate" menuItems='@ref(vm.menuHierarchy)'/>
+    &#60;/navbar>
+    &#60;template name="menu" var="menuItem">
+        &#60;nav label="@load(menuItem.label)" iconSclass="@load(menuItem.iconSclass)">
+            &#60;apply template="iterate" menuItems="@ref(menuItem.subMenus)"/>
+        &#60;/nav>
+    &#60;/template>
+    &#60;template name="iterate" var="menuItems">
+        &#60;forEach items="@load(menuItems)"><!--Podemos usar var="nomeDaVariavel"-->
+            &#60;apply template="@load(empty each.subMenus ? 'menuitem' : 'menu')" menuItem="@ref(each)"/>
+        &#60;/forEach>
+    &#60;/template>
+    &#60;template name="menuitem" var="menuItem">
+        &#60;navitem label="@load(menuItem.label)"/>
+    &#60;/template>
+&#60;/div>
+</pre>
+****
