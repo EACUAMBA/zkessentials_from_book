@@ -1,0 +1,7 @@
+<zk>
+    <div height="100%">
+        <template name="layout" src="/cap_06/page_based/layout/template.zul"/>
+        <apply template="layout"/>
+        <template name="center" src="/cap_05/mvc/profile-mvc.zul"/>
+    </div>
+</zk>

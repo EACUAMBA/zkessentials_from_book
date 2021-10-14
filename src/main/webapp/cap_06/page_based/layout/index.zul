@@ -1,0 +1,5 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css"?>
+<zk>
+    <template name="layout" src="/cap_06/page_based/layout/template.zul"/>
+    <apply template="layout"/>
+</zk>

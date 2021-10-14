@@ -1,0 +1,14 @@
+<borderlayout hflex="1" vflex="1">
+    <north height="120px" border="none">
+        <include src="/cap_04/mvc/banner.zul"/>
+    </north>
+    <west width="260px" border="none" collapsible="true" splittable="true" minsize="100">
+        <include src="/cap_06/page_based/layout/sidebar.zul"/>
+    </west>
+    <center id="mainContent" autoscroll="true">
+        <apply template="center"/>
+    </center>
+    <south height="100px" border="none">
+        <include src="/cap_04/mvc/footer.zul"/>
+    </south>
+</borderlayout>
