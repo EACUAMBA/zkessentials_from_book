@@ -1,0 +1,82 @@
+<?link rel="stylesheet" type="text/css" href="css/style.css" ?>
+<window border="normal" hflex="1" vflex="1" contentStyle="overflow: auto;" >
+    <caption src="/img/todo.png" sclass="fn-caption" label="Todo List (MVVM)"/>
+    <borderlayout viewModel="@id('vm') @init('com.mafurrasoft.dev.cap_04.viewmodel.TodoListViewModel')">
+        <center autoscroll="true" border="none">
+            <vlayout hflex="1" vflex="1" >
+                <hlayout>
+                    <textbox placeholder="O que precisa ser feito?" hflex="1" value="@bind(vm.subject)" onOK="@command('addTodo')" />
+                    <button image="/img/plus.png" onClick="@command('addTodo')"/>
+                </hlayout>
+                <separator/>
+                <listbox vflex="1" model=" @bind(vm.todoListModelList)" selectedItem="@bind(vm.selectedTodo)">
+                    <listhead>
+                        <listheader width="50px"/>
+                        <listheader/>
+                        <listheader width="min" align="right"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem sclass="@(each.complete ? 'complete-todo' : '')" >
+                            <listcell>
+                                <checkbox checked="@bind(each.complete)" onCheck="@command('completeTodo', todo=each)"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${each.subject}"/>
+                            </listcell>
+                            <listcell>
+                                <button image="/img/cross.png" width="50px" onClick="@command('removeTodo', todo=each)"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </vlayout>
+        </center>
+        <east  visible="@bind(not empty vm.selectedTodo)" width="500px" border="none" collapsible="false" splittable="true" minsize="250" autoscroll="true">
+            <vlayout form="@id('todoForm') @load(vm.selectedTodo) @save(vm.selectedTodo, before='actualizar') @validator(vm.todoValidator)">
+                <grid>
+                    <columns>
+                        <column width="100px"/>
+                        <column hflex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <cell>
+                                <checkbox checked="@bind(todoForm.complete)" />
+                            </cell>
+                            <cell >
+                                <textbox  hflex="1" value="@bind(todoForm.subject)"/>
+                            </cell>
+                        </row>
+                        <row>
+                            <cell>
+                                <label value="Priority:"/>
+                            </cell>
+                            <radiogroup model="@bind(vm.priorityList)" selectedItem="@bind(todoForm.priority)">
+                                <cell>
+                                    <template name="model">
+                                        <radio label="@bind(each.label)"/>
+                                    </template>
+                                </cell>
+                            </radiogroup>
+                        </row>
+                        <row>
+                            <cell>Date:</cell>
+                            <cell><datebox placeholder="Insira a data" value="@bind(todoForm.date)"/></cell>
+                        </row>
+                        <row>
+                            <cell>Descrição: </cell>
+                            <cell>
+                                <textbox multiline="true" height="100px" value="@bind(todoForm.description)" />
+                            </cell>
+                        </row>
+                    </rows>
+                </grid>
+                <hbox hflex="1" vflex="1">
+                    <button label="Actualizar" onClick="@command('actualizar')"/>
+                    <button label="Recarregar" onClick="@command('recarregar')"/>
+                    <button label="Fechar"  sclass="fechar-bt" onClick="@command('fecharDetalhes')"/>
+                </hbox>
+            </vlayout>
+        </east>
+    </borderlayout>
+</window>

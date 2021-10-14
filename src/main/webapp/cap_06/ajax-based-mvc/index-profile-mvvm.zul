@@ -1,0 +1,70 @@
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<window border="normal" hflex="1" vflex="1" contentStyle="overflow:auto" viewModel="@id('profile') @init('com.mafurrasoft.dev.cap_03.viewmodel.ProfileViewModel')" >
+    <caption src="/img/profile.png" sclass="fn-caption" label="Profile (MVVM)" />
+
+    <vlayout>
+        <grid width="500px" form="@id('formObject') @load(profile.currentUser)@save(profile.currentUser, before = 'save')">
+            <columns>
+                <column align="right" hflex="min"/>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <cell sclass="row-title">
+                        Account:
+                    </cell>
+                    <cell>
+                        <label value="@load(formObject.account)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell sclass="row-title">Full Name:</cell>
+                    <cell>
+                        <textbox id="fullName" width="200px" constraint="no empty: Por favor preencha o campo." value="@load(formObject.fullName) @save(formObject.fullName)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell sclass="row-title">
+                        Email:
+                    </cell>
+                    <cell>
+                        <textbox id="email" width="200px" constraint="/[a-z0-9A-Z]+@[a-z0-9A-Z]+[.][a-zA-Z]{3}/: Email invalido" value="@bind(formObject.email)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell sclass="row-title">
+                        Birth date:
+                    </cell>
+                    <cell>
+                        <datebox id="birthday" width="200px" constraint="no future: Essa é mesmo tua data de nascimento" value="@bind(formObject.birthday)"/>
+                    </cell>
+                </row>
+                <row>
+                    <cell sclass="row-title">
+                        Pais:
+                    </cell>
+                    <cell>
+                        <listbox mold="select" width="200px" model="@load(profile.countryList)" selectedItem="@bind(formObject.country)">
+                            <template name="model">
+                                <listitem label="${each.toUpperCase()}"/>
+                            </template>
+                        </listbox>
+                    </cell>
+                </row>
+                <row>
+                    <cell sclass="row-title">
+                        Bio:
+                    </cell>
+                    <cell>
+                        <textbox id="bio" multiline="true" hflex="1" height="200px" value="@bind(formObject.bio)"/>
+                    </cell>
+                </row>
+            </rows>
+        </grid>
+        <div>Você está editando o profile de <label value="@load(profile.currentUser.fullName)"/></div>
+        <hlayout>
+            <button onClick="@command('save')" label="Save"/>
+            <button onClick="@command('reload')" label="Reload"/>
+        </hlayout>
+    </vlayout>
+</window>

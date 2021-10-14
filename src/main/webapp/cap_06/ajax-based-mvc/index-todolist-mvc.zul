@@ -1,0 +1,82 @@
+<?link rel="stylesheet" type="text/css" href="css/style.css" ?>
+<window apply="com.mafurrasoft.dev.cap_04.controller.TodoListController" border="normal" hflex="1" vflex="1" contentStyle="overflow: auto;">
+    <caption src="/img/todo.png" sclass="fn-caption" label="Todo List (MVC)"/>
+    <borderlayout>
+        <center autoscroll="true" border="none">
+            <vlayout hflex="1" vflex="1">
+                <hlayout>
+                    <textbox placeholder="O que precisa ser feito?" id="tarefaTextbox" hflex="1"/>
+                    <button image="/img/plus.png" id="adicionarTarefaButton"/>
+                </hlayout>
+                <separator/>
+                <listbox id="todoListbox" vflex="1">
+                    <listhead>
+                        <listheader width="50px"/>
+                        <listheader/>
+                        <listheader width="min" align="right"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem sclass="${each.complete ? 'complete-todo' : ''}" value="${each}">
+                            <listcell>
+                                <checkbox forward="onCheck=todoListbox.onChecarTarefa" checked="${each.complete}"/>
+                            </listcell>
+                            <listcell>
+                                <label value="${each.subject}"/>
+                            </listcell>
+                            <listcell>
+                                <button forward="onClick=todoListbox.onTarefaApagar" image="/img/cross.png" width="50px"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </vlayout>
+        </center>
+        <east id="tarefaDetalhesBlock" visible="false" width="500px" border="none" collapsible="false" splittable="true" minsize="250" autoscroll="true">
+            <vlayout>
+                <grid>
+                    <columns>
+                        <column width="100px"/>
+                        <column hflex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <cell>
+                                <checkbox id="feitoCheckbox"/>
+                            </cell>
+                            <cell >
+                                <textbox id="tarefaAssunto" hflex="1"/>
+                            </cell>
+                        </row>
+                        <row>
+                            <cell>
+                                <label value="Priority:"/>
+                            </cell>
+                            <radiogroup id="selectedTodoPriority">
+                                <cell>
+                                    <template name="model">
+                                        <radio label="@load(each.label)"/>
+                                    </template>
+                                </cell>
+                            </radiogroup>
+                        </row>
+                        <row>
+                            <cell>Date:</cell>
+                            <cell><datebox placeholder="Insira a data" id="tarefaDatebox"/></cell>
+                        </row>
+                        <row>
+                            <cell>Descrição: </cell>
+                            <cell>
+                                <textbox multiline="true" height="100px" id="descricaoTarefa"/>
+                            </cell>
+                        </row>
+                    </rows>
+                </grid>
+                <hbox hflex="1" vflex="1">
+                    <button label="Actualizar" id="actualizarTarefaBt"/>
+                    <button label="Recarregar" id="recarregarTarefaBt"/>
+                    <button label="Fechar" id="fecharTarefaBt" sclass="fechar-bt"/>
+                </hbox>
+            </vlayout>
+        </east>
+    </borderlayout>
+</window>
