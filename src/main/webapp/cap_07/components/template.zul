@@ -1,0 +1,17 @@
+
+    <borderlayout hflex="1" vflex="1">
+        <north height="120px" border="none">
+            <include src="/cap_07/components/banner.zul"/>
+        </north>
+        <if test="${not sessionScope.userCredential.anonymous}">
+            <west width="250px" maxsize="300" splittable="true" collapsible="false">
+                <include src="/cap_07/components/sidebar.zul"/>
+            </west>
+        </if>
+        <center >
+            <apply template="center"/>
+        </center>
+        <south>
+            <include src="/cap_07/components/footer.zul"/>
+        </south>
+    </borderlayout>

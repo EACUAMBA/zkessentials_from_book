@@ -1,0 +1,7 @@
+<?link rel="stylesheet" type="text/css" href="/css/style.css" ?>
+<?init class="com.mafurrasoft.dev.cap_07.AuthenticationInit"?>
+
+<zk>
+    <template name="layout" src="/cap_07/components/template.zul"/>
+    <apply template="layout"/>
+</zk>

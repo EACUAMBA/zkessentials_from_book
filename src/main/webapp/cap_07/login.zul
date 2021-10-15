@@ -1,0 +1,33 @@
+<zk>
+    <div height="100%">
+        <template name="layout" src="/cap_07/components/template.zul"/>
+        <apply template="layout"/>
+        <template name="center">
+            <hbox vflex="1" hflex="1" align="center" pack="center" spacing="20px">
+                <vlayout>
+                    <window id="loginWin" apply="com.mafurrasoft.dev.cap_07.controller.LoginController" title="Autenticação com o seu nome" border="normal" hflex="min">
+                        <vbox hflex="min" align="center">
+                            <grid hflex="min">
+                                <columns>
+                                    <column hflex="min" align="right"/>
+                                    <column />
+                                </columns>
+                                <rows>
+                                    <row>
+                                        Conta: <textbox id="conta" width="300px"/>
+                                    </row>
+                                    <row>
+                                        Senha: <textbox id="senha" width="300px"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                            <label id="message" sclass="warn" value="&#160;"/>
+                            <button id="login" label="Entrar"/>
+                        </vbox>
+                    </window>
+                    (use a conta "zkoss" e a senha "12345" para entrar)
+                </vlayout>
+            </hbox>
+        </template>
+    </div>
+</zk>
