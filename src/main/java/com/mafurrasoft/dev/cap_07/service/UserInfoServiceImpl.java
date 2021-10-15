@@ -2,10 +2,15 @@ package com.mafurrasoft.dev.cap_07.service;
 
 import com.mafurrasoft.dev.entity.User;
 import com.mafurrasoft.dev.services.UserInfoService;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@Scope(value = "singleton", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserInfoServiceImpl implements UserInfoService {
     static protected List<User> userList = new ArrayList<User>();
     static{

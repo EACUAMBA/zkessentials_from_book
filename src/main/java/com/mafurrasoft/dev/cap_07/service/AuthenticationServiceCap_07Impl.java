@@ -4,15 +4,28 @@ import com.mafurrasoft.dev.entity.User;
 import com.mafurrasoft.dev.services.AuthenticationService;
 import com.mafurrasoft.dev.services.UserCredential;
 import com.mafurrasoft.dev.services.UserInfoService;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.select.Selectors;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
-public class AuthenticationServiceCap_07Impl  implements AuthenticationService {
+import java.io.Serializable;
 
-    UserInfoService userInfoService = new UserInfoServiceImpl();
+@Service
+@Scope(value = "singleton", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
+public class AuthenticationServiceCap_07Impl  implements AuthenticationService, Serializable {
+
+    @WireVariable
+    UserInfoService userInfoService;
 
     @Override
     public boolean login(String account, String password) {
+//        Selectors.wireVariables(Page page, this, Selectors.newVariableResolvers(getClass(), null));
         User user = userInfoService.findUser(account);
         if(user == null || !user.getPassword().equals(password)){
             return false;
