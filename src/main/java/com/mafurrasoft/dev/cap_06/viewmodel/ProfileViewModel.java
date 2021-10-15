@@ -1,7 +1,7 @@
 package com.mafurrasoft.dev.cap_06.viewmodel;
 
-import com.mafurrasoft.dev.cap_06.service.AuthenticationServiceCap_03Impl;
-import com.mafurrasoft.dev.cap_06.service.UserInfoServiceCap_03Impl;
+import com.mafurrasoft.dev.cap_06.service.AuthenticationServiceCap_06Impl;
+import com.mafurrasoft.dev.cap_06.service.UserInfoServiceCap_06Impl;
 import com.mafurrasoft.dev.entity.User;
 import com.mafurrasoft.dev.services.AuthenticationService;
 import com.mafurrasoft.dev.services.CommonInfoService;
@@ -14,8 +14,8 @@ import org.zkoss.zk.ui.util.Clients;
 import java.util.List;
 
 public class ProfileViewModel {
-    private AuthenticationService authenticationService = new AuthenticationServiceCap_03Impl();
-    private UserInfoService userInfoService = new UserInfoServiceCap_03Impl();
+    private AuthenticationService authenticationService = new AuthenticationServiceCap_06Impl();
+    private UserInfoService userInfoService = new UserInfoServiceCap_06Impl();
     private User currentUser;
 
     public ProfileViewModel(){

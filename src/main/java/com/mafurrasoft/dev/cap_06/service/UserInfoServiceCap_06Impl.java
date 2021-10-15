@@ -6,7 +6,7 @@ import com.mafurrasoft.dev.services.UserInfoService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserInfoServiceCap_03Impl implements UserInfoService {
+public class UserInfoServiceCap_06Impl implements UserInfoService {
     static protected List<User> userList = new ArrayList<User>();
     static{
         userList.add(new User("anonymous","1234","Anonymous","anonumous@your.com"));

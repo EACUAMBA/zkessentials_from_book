@@ -5,7 +5,7 @@ import com.mafurrasoft.dev.services.UserCredential;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
-public class AuthenticationServiceCap_03Impl implements AuthenticationService {
+public class AuthenticationServiceCap_06Impl implements AuthenticationService {
     @Override
     public boolean login(String account, String password) {
         return false;

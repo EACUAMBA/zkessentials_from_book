@@ -1,7 +1,7 @@
 package com.mafurrasoft.dev.cap_06.controller;
 
-import com.mafurrasoft.dev.cap_06.service.AuthenticationServiceCap_03Impl;
-import com.mafurrasoft.dev.cap_06.service.UserInfoServiceCap_03Impl;
+import com.mafurrasoft.dev.cap_06.service.AuthenticationServiceCap_06Impl;
+import com.mafurrasoft.dev.cap_06.service.UserInfoServiceCap_06Impl;
 import com.mafurrasoft.dev.entity.User;
 import com.mafurrasoft.dev.services.AuthenticationService;
 import com.mafurrasoft.dev.services.CommonInfoService;
@@ -40,8 +40,8 @@ public class ProfileViewController extends SelectorComposer<Component> {
     Label namelabel;
 
 
-    AuthenticationService authenticationService = new AuthenticationServiceCap_03Impl();
-    UserInfoService userInfoService = new UserInfoServiceCap_03Impl();
+    AuthenticationService authenticationService = new AuthenticationServiceCap_06Impl();
+    UserInfoService userInfoService = new UserInfoServiceCap_06Impl();
 
     @Override
     public void doAfterCompose(Component component) throws Exception {

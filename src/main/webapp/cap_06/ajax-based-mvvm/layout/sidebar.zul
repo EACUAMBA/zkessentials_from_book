@@ -1,0 +1,14 @@
+<grid hflex="1" vflex="1" sclass="sidebar" viewModel="@id('vm') @init('com.mafurrasoft.dev.cap_06.viewmodel.SidebarViewModel')" model="@load(vm.sidebarPages)">
+    <columns>
+        <column width="50px"/>
+        <column/>
+    </columns>
+    <rows >
+        <template name="model">
+            <row value="@(each)" onClick="@global-command('onNavegate', page=each)">
+                <image src="@load(each.iconUri)"/>
+                <label value="@(each.label)"/>
+            </row>
+        </template>
+    </rows>
+</grid>

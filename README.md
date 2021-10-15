@@ -574,3 +574,17 @@ public class MenuViewModel {
 &#60;/div>
 </pre>
 **Aqui criamos uma div com o intuido de ser o nosso componente root já que o zul não permite um arquivo .zul ter dois componentes roots, com esse compodenente podemos ajustar os outros componennts como os templates e o navbar que vai processar os templates. Para o navbar definimos que ele vai se relacionar com a viewModel que criamos e que ela tera um id vm, apos isso por dentro chamamos o primeiro template que é o template iterate, que será resposavel por iterar sobre os elementos e ir alternando entre os elemento que saõ nodes root e os elemento suqe não ão elementos roots, podemos ver o nos elemnto templeta defininmo no chamamenco com o appli uma variavel chamada , menuItems=@ref(MenuItems.submenus, mostrando quye svamos iterar sobre submenus. Agora que ja estamos iterando sobre os submenos devemos se certificar que estamos trabalahando com um item de menu que tem ou não submenus, para isso fazemos meio que um if e se tiver submennus es elemeno nos vmaos chamamr o memso elemento que vai criar a estrurura do zero., será uma recursão.**
+
+#### Como podemos obter um elemento da página que o elemento que temos não é o pai dele?
+Podemos obter a instancia de um elemento em uma página conhecendo a página em questão, para isso se tivermos um elemento nessa página podemos usar o method getPage(), para obter uma instancia dá pagina em que esta inserido esse objecto, apos isso podemos usar uma outra class statica para procurta por um elemento com o id que nos queremos, podemos fazer desse jeito simplesmente magnifico, olha um codigo.
+
+<pre>
+
+    @Wire
+    private Grid sidebar;
+    
+    Include include = (Include) Selectors.find(sidebar.getPage(), "#idDoElemento").iterator().next();
+    include.setSrc(locationUri);
+
+</pre>
+
