@@ -1,13 +1,29 @@
 <beans	xmlns="http://www.springframework.org/schema/beans"
           xmlns:context="http://www.springframework.org/schema/context"
+          xmlns:tx="http://www.springframework.org/schema/tx"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="
 								http://www.springframework.org/schema/beans
 								http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 								http://www.springframework.org/schema/context
-								http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+								http://www.springframework.org/schema/context/spring-context-3.0.xsd
+								http://www.springframework.org/schema/tx
+								http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-<!--    Estamos dizendo que o spring deverá procurar as minhas classes apartir desse pacote, ele vai procurar todas as classe com anotacoes de bean e vei gerir essas classes para nos.-->
-    <context:component-scan	base-package="com.mafurrasoft.dev"	/>
+    <!--    Estamos dizendo que o spring deverá procurar as minhas classes apartir desse pacote, ele vai procurar todas as classe com anotacoes de bean e vei gerir essas classes para nos.-->
+    <context:component-scan base-package="com.mafurrasoft.dev"/>
 
-</beans>
+<!--    Configuracao do bind entre o Spring e o JPA, Isso permite qeu o Spring passe a ter a capacidade de injectar instanncias de EntotyManeger para nos-->
+        <!--	jpa(hibernate)	configuration	-->
+        <bean id="entityManagerFactory"
+              class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+            <property name="persistenceUnitName" value="zkessentials_from_book"/>
+        </bean>
+
+        <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property	name="entityManagerFactory"	ref="entityManagerFactory"	/>
+        </bean>
+
+        <tx:annotation-driven	/>
+
+    </beans>

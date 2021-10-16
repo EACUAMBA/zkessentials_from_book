@@ -12,14 +12,18 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.lang.Strings;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.ListModelList;
 
 import java.util.Arrays;
 import java.util.List;
 
+@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class TodoListViewModel {
-    private TodoListService todoListService =new TodoListServiceImpl();
+    @WireVariable
+    private TodoListService todoListService;
     private String subject;
     private ListModelList<Todo> todoListModelList;
     Todo selectedTodo;

@@ -13,22 +13,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.mafurrasoft.dev.dao.TodoDao;
 import com.mafurrasoft.dev.entity.Priority;
 import com.mafurrasoft.dev.entity.Todo;
 import com.mafurrasoft.dev.services.TodoListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 
-
+@Service("todoListService")
+@Scope(value = "singleton", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class TodoListServiceImpl implements TodoListService {
 
-	static int todoId = 0;
-	static List<Todo> todoList = new ArrayList<Todo>();
-	static{
-		todoList.add(new Todo(todoId++,"Buy some milk", Priority.LOW,null,null));
-		todoList.add(new Todo(todoId++,"Dennis' birthday gift",Priority.MEDIUM,dayAfter(10),null));
-		todoList.add(new Todo(todoId++,"Pay credit-card bill",Priority.HIGH,dayAfter(5),"$1,000"));
-	}
-	
-	
+	@Autowired
+	private TodoDao todoDao;
+
 	private static Date dayAfter(int d){
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.DATE, d);
@@ -37,31 +39,21 @@ public class TodoListServiceImpl implements TodoListService {
 	
 	/** synchronized is just because we use static userList in this demo to prevent concurrent access **/
 	public synchronized List<Todo>getTodoList() {
-		List<Todo> list = new ArrayList<Todo>();
-		for(Todo todo:todoList){
-			list.add(Todo.clone(todo));
-		}
-		return list;
+		return this.todoDao.queryAll();
 	}
 	
 	/** synchronized is just because we use static userList in this demo to prevent concurrent access **/
 	public synchronized Todo getTodo(Integer id){
-		int size = todoList.size();
-		for(int i=0;i<size;i++){
-			Todo t = todoList.get(i);
-			if(t.getId().equals(id)){
-				return Todo.clone(t);
-			}
-		}
-		return null;
+
+			Todo todoTemp = new Todo();
+			todoTemp.setId(id);
+			return this.todoDao.get(todoTemp);
+
 	}
 	
 	/** synchronized is just because we use static userList in this demo to prevent concurrent access **/
 	public synchronized Todo saveTodo(Todo todo){
-		todo = Todo.clone(todo);
-		todo.setId(todoId++);
-		todoList.add(todo);
-		return todo;
+		return this.todoDao.save(todo);
 	}
 	
 	/** synchronized is just because we use static userList in this demo to prevent concurrent access **/
@@ -69,31 +61,13 @@ public class TodoListServiceImpl implements TodoListService {
 		if(todo.getId()==null){
 			throw new IllegalArgumentException("cann't save a null-id todo, save it first");
 		}else{
-			todo = Todo.clone(todo);
-			int size = todoList.size();
-			for(int i=0;i<size;i++){
-				Todo t = todoList.get(i);
-				if(t.getId().equals(todo.getId())){
-					todoList.set(i, todo);
-					return todo;
-				}
-			}
-			throw new RuntimeException("Todo not found "+todo.getId());
+			return this.todoDao.update(todo);
 		}
 	}
 	
 	/** synchronized is just because we use static userList in this demo to prevent concurrent access **/
 	public synchronized void deleteTodo(Todo todo){
-		if(todo.getId()!=null){
-			int size = todoList.size();
-			for(int i=0;i<size;i++){
-				Todo t = todoList.get(i);
-				if(t.getId().equals(todo.getId())){
-					todoList.remove(i);
-					return;
-				}
-			}
-		}
+		this.todoDao.delete(todo);
 	}
 
 }

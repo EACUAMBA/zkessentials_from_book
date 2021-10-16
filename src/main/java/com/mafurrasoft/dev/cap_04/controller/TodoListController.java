@@ -8,12 +8,15 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.select.SelectorComposer;
 import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.Wire;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
 import java.util.List;
 
+@VariableResolver(org.zkoss.zkplus.spring.DelegatingVariableResolver.class)
 public class TodoListController extends SelectorComposer<Component> {
 
     @Wire
@@ -43,7 +46,8 @@ public class TodoListController extends SelectorComposer<Component> {
     @Wire
     East tarefaDetalhesBlock;
 
-    TodoListService todoListService = new TodoListServiceImpl();
+    @WireVariable
+    TodoListService todoListService;
 
     ListModelList<Todo> todoListModelList;
     ListModelList<Priority> priorityListModelList;
